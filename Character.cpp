@@ -6,6 +6,7 @@
 #include <algorithm>
 
 using namespace std;
+
 Character::Character(Types::CharacterClass charcaterClass)
 {
 
@@ -56,7 +57,8 @@ void Character::StartTurn(Grid* battlefield) {
             
             if (currentBox.xIndex > target->currentBox.xIndex)
             {
-                if(find(battlefield->grids.begin(), battlefield->grids.end(), currentBox.Index - 1) != battlefield->grids.end())
+            	//corrected find third param and implemented operator == overload
+                if(find(battlefield->grids.begin(), battlefield->grids.end(), currentBox) != battlefield->grids.end())
                 
                 {
                     currentBox.ocupied = false;
