@@ -4,6 +4,8 @@
 #include <list>
 #include <iostream>
 #include "Grid.h"
+//Added library so shared_prt could be used.
+#include <memory>
 using namespace std;
 class BattleField
 {
@@ -17,7 +19,8 @@ public:
 	list<Character>* AllPlayers;
 	shared_ptr<Character> PlayerCharacter;
 	//Character* PlayerCharacter;
-	shared_ptr<Character>* EnemyCharacter;
+	//Removed pointer declaration (*).
+	shared_ptr<Character> EnemyCharacter;
 	int currentTurn;
 	int numberOfPossibleTiles;
 

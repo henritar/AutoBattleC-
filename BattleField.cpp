@@ -6,6 +6,7 @@
 #include "BattleField.h"
 #include <list>
 #include <string>
+#include <cstdlib>
 
 using namespace std;
 
@@ -30,38 +31,29 @@ void BattleField::GetPlayerChoice()
     //asks for the player to choose between for possible classes via console.
     printf("Choose Between One of this Classes:\n");
 
-    printf("[1] Paladin, [2] Warrior, [3] Cleric, [4] Archer");
+    printf("[1] Paladin, [2] Warrior, [3] Cleric, [4] Archer\n");
     //store the player choice in a variable
-    std::string choice;
+    int choice;
 
-    std::getline(std::cin, choice);
-    
     cin >> choice;
-    switch ((choice))
+
+    // changed useless Switch statement to if statement
+    if (choice > 0 && choice < 5)
     {
-    case "1":
-        CreatePlayerCharacter(choice);
-        break;
-    case "2":
-        CreatePlayerCharacter(choice);
-        break;
-    case "3":
-        CreatePlayerCharacter(choice);
-        break;
-    case "4":
-        CreatePlayerCharacter(choice);
-        break;
-    default:
-        GetPlayerChoice();
-        break;
+    	CreatePlayerCharacter(choice);
+    }
+    else
+    {
+    	GetPlayerChoice();
     }
 }
 
 void BattleField::CreatePlayerCharacter(int classIndex)
 {
 
-    Types::CharacterClass* characterClass = (Types::CharacterClass*)classIndex;
-    printf("Player Class Choice: {characterClass}");
+	//removed pointer
+	Types::CharacterClass characterClass = (Types::CharacterClass)classIndex;
+    cout << "Player Class Choice: " << characterClass << endl;
     
     PlayerCharacter = std::make_shared<Character>(characterClass);
     
@@ -79,8 +71,9 @@ void BattleField::CreateEnemyCharacter()
     
     int randomInteger = GetRandomInt(1, 4);
     Types::CharacterClass enemyClass = (Types::CharacterClass)randomInteger;
-    printf("Enemy Class Choice: {enemyClass}");
-    EnemyCharacter = new Character(enemyClass);
+    cout << "Enemy Class Choice: " << enemyClass << endl << endl;
+    //corrected the Enemycharacter type
+    EnemyCharacter = std::make_shared<Character>(enemyClass);
     EnemyCharacter->Health = 100;
     PlayerCharacter->BaseDamage = 20;
     PlayerCharacter->PlayerIndex = 1;
@@ -88,13 +81,17 @@ void BattleField::CreateEnemyCharacter()
 
 }
 
+
+//corrected attribuition and creating a new aux variable so
+//the value will not be lost when updating turn player.
 void BattleField::StartGame()
 {
     //populates the character variables and targets
-    EnemyCharacter->target = PlayerCharacter;
-    PlayerCharacter->target = EnemyCharacter;
-    AllPlayers->push_back(PlayerCharacter);
-    AllPlayers->push_back(EnemyCharacter);
+	Character* auxCharacter = EnemyCharacter->target;
+    EnemyCharacter->target = PlayerCharacter->target;
+    PlayerCharacter->target = auxCharacter;
+    AllPlayers->push_back(*PlayerCharacter);
+    AllPlayers->push_back(*EnemyCharacter);
     AlocatePlayers();
     StartTurn();
 
@@ -134,8 +131,13 @@ void BattleField::HandleTurn()
     }
     else
     {
+    	std::string alpha;
         printf("\n");
         printf("Click on any key to start the next turn...\n");
+
+    	//Added a getline to wait for user input
+        std::getline(std::cin, alpha);
+
         printf("\n");
 
         //TODO
@@ -146,8 +148,9 @@ void BattleField::HandleTurn()
 
 int BattleField::GetRandomInt(int min, int max)
 {
-    
-    int index = GetRandomInt(min, max);
+	srand((unsigned) time(NULL));
+
+    int index = rand() % max + min;
     return index;
 }
 
