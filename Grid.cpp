@@ -1,5 +1,7 @@
 #include "Grid.h"
 #include "Types.h"
+//added include so printf could work properly
+#include "stdio.h"
 
 
 Grid::Grid(int Lines, int Columns)
@@ -13,7 +15,8 @@ Grid::Grid(int Lines, int Columns)
         for (int j = 0; j < Columns; j++)
         {
             Types::GridBox* newBox = new Types::GridBox(i, j, false, (Columns * i + j));
-            grids.insert(grids.end(), newBox);
+            //Added (*) pointer to get pointer value
+            grids.insert(grids.end(), *newBox);
             //Console.Write($"{newBox.Index}\n");
         }
     }

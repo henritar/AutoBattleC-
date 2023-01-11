@@ -10,6 +10,7 @@ public:
     Grid(int Lines, int Columns);
     ~Grid();
 
+
     std::vector<Types::GridBox> grids;
 
     int xLenght;
